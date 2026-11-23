@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="et">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>buckl3 — Igor Aleksejev</title>
+  <meta name="description" content="buckl3 // Igor Aleksejev — noorem tarkvaraarendaja. Mini-portfoolio: C#, .NET, JavaScript, SQL, Python.">
+  <meta name="theme-color" content="#07080b">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/jetbrains-mono-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/chakra-petch-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script>
+    // Apply saved preferences before first paint (no flash).
+    (function () {
+      var d = document.documentElement;
+      var safe = null;
+      try {
+        safe = localStorage.getItem('b3.safe');
+        var l = localStorage.getItem('b3.lang');
+        if (l === 'et' || l === 'en') d.lang = l;
+      } catch (e) {}
+      // Reduced-motion users start in SAFE MODE; an explicit toggle choice wins.
+      var reduced = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+      if (safe === '1' || (safe === null && reduced)) d.classList.add('safe');
+      d.classList.add('js');
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-i18n="skip">Liigu sisu juurde</a>
+
+  <!-- Boot sequence (once per session) -->
+  <div id="boot" class="boot" hidden>
+    <pre class="boot__log" id="bootLog" aria-hidden="true"></pre>
+    <button type="button" class="boot__skip" id="bootSkip" aria-label="Skip intro">[ SKIP ]</button>
+  </div>
+
+  <canvas id="rain" class="rain" aria-hidden="true"></canvas>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="topbar__path" href="#top" aria-label="buckl3 — avaleht">
+      <span class="c-cyan">buckl3</span><span class="dim">://</span>portfolio<span class="cursor" aria-hidden="true">_</span>
+    </a>
+    <nav class="topbar__nav" aria-label="Main">
+      <a href="#whoami">./whoami</a>
+      <a href="#projects">ls projects/</a>
+      <a href="#stack">stack --stats</a>
+      <a href="#contact">ping</a>
+    </nav>
+    <div class="topbar__ctrl">
+      <div class="lang" role="group" aria-label="Language / Keel">
+        <button type="button" data-lang="et" aria-pressed="true">ET</button><span class="dim">|</span><button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <button type="button" id="safeToggle" class="safe-toggle" aria-pressed="false">
+        <span class="safe-toggle__box" aria-hidden="true"></span><span data-i18n="safe">SAFE MODE</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="hero__text">
+        <p class="tag">[ <span data-i18n="hero.tag">ÜHENDUS LOODUD</span> ]</p>
+        <canvas id="banner" class="banner" aria-hidden="true"></canvas>
+        <h1 class="glitch" data-text="Igor Aleksejev">Igor Aleksejev</h1>
+        <p class="hero__role"><span class="prompt">&gt;</span> <span id="typed" data-i18n="hero.role">noorem tarkvaraarendaja</span><span class="cursor" aria-hidden="true">_</span></p>
+        <p class="hero__lead" data-i18n="hero.lead">Tallinna Tehnoloogiakolledži õpilane. Ehitan veebirakendusi, API-sid ja andmebaase — ja vahel ka madu konsooli.</p>
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="#projects" data-i18n="hero.cta1">[ AVA PROJEKTID ]</a>
+          <a class="btn" href="https://github.com/IgorAleksejevTTHK" target="_blank" rel="noopener">[ GITHUB ↗ ]</a>
+        </div>
+      </div>
+      <figure class="hero__mask frame">
+        <canvas id="mask" class="mask" role="img" aria-label="Abstraktne glitch-mask ASCII-märkidest (buckl3 märk)"></canvas>
+        <figcaption class="frame__label">MASK_v1.0 // <span data-i18n="hero.mask">originaal</span></figcaption>
+      </figure>
+    </section>
+
+    <!-- WHOAMI -->
+    <section class="section" id="whoami" aria-labelledby="h-whoami">
+      <h2 class="section__title" id="h-whoami"><span class="prompt">$</span> <span data-scramble>./whoami</span></h2>
+      <div class="whoami">
+        <figure class="catcard frame">
+          <div class="catcard__modes" role="group" aria-label="Portree režiim">
+            <button type="button" data-catmode="ascii" aria-pressed="true">ASCII</button>
+            <button type="button" data-catmode="halftone" aria-pressed="false">HALFTONE</button>
+          </div>
+          <canvas id="cat" class="cat" role="img" aria-label="ASCII-portree: kass smokingus"></canvas>
+          <figcaption class="frame__label">avatar.jpg → ascii // <span data-i18n="cat.cap">kass smokingus</span></figcaption>
+        </figure>
+        <div class="term" role="group" aria-label="whoami">
+          <div class="term__bar" aria-hidden="true"><span></span><span></span><span></span><em>~/whoami — bash</em></div>
+          <dl class="term__body kv">
+            <div><dt>handle</dt><dd class="c-cyan">buckl3</dd></div>
+            <div><dt data-i18n="kv.name">nimi</dt><dd>Igor Aleksejev</dd></div>
+            <div><dt data-i18n="kv.role">roll</dt><dd data-i18n="kv.roleV">noorem tarkvaraarendaja (õpilane)</dd></div>
+            <div><dt data-i18n="kv.school">kool</dt><dd>Tallinna Tehnoloogiakolledž // TARpv24</dd></div>
+            <div><dt data-i18n="kv.langs">keeled</dt><dd data-i18n="kv.langsV">vene · eesti · inglise</dd></div>
+            <div><dt data-i18n="kv.focus">fookus</dt><dd>C# / .NET · JavaScript · SQL · Python</dd></div>
+            <div><dt>status</dt><dd class="c-green" data-i18n="kv.status">lõputöö kompileerub…</dd></div>
+          </dl>
+          <p class="term__note" data-i18n="whoami.note">Mulle meeldib, kui asi lihtsalt töötab: selge andmemudel, korralik API ja liides, mis ei vaja kasutusjuhendit.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TUNNEL DIVIDER -->
+    <div class="strip frame" aria-hidden="true">
+      <canvas id="tunnel" class="strip__canvas"></canvas>
+      <span class="strip__label">&gt; cd ~/projects &amp;&amp; ls -la</span>
+    </div>
+
+    <!-- PROJECTS -->
+    <section class="section" id="projects" aria-labelledby="h-projects">
+      <h2 class="section__title" id="h-projects"><span class="prompt">$</span> <span data-scramble>ls projects/</span></h2>
+      <p class="section__lead" data-i18n="projects.lead">Valik minu töid GitHubist. Iga kaart = üks repo. Vajuta „detailid", et näha rohkem.</p>
+      <ol class="cards" id="cards"></ol>
+    </section>
+
+    <!-- WAVE DIVIDER -->
+    <div class="strip strip--wave frame" aria-hidden="true">
+      <canvas id="wave" class="strip__canvas"></canvas>
+    </div>
+
+    <!-- STACK -->
+    <section class="section" id="stack" aria-labelledby="h-stack">
+      <h2 class="section__title" id="h-stack"><span class="prompt">$</span> <span data-scramble>stack --stats</span></h2>
+      <div class="stack">
+        <div class="term">
+          <div class="term__bar" aria-hidden="true"><span></span><span></span><span></span><em>gh repo list --public | lang</em></div>
+          <div class="term__body">
+            <p class="dim small" data-i18n="stack.note">Avalikud repod põhikeele järgi (GitHubi andmed, nov 2026):</p>
+            <ul class="bars" id="bars"></ul>
+          </div>
+        </div>
+        <div class="term">
+          <div class="term__bar" aria-hidden="true"><span></span><span></span><span></span><em>cat skills.txt</em></div>
+          <div class="term__body">
+            <ul class="skills">
+              <li><b>C# / .NET</b> ASP.NET Core MVC · Web API · Windows Forms · .NET MAUI</li>
+              <li><b data-i18n="sk.db">Andmebaasid</b> SQL Server · SQLite · MySQL · Entity Framework Core</li>
+              <li><b data-i18n="sk.web">Veeb</b> HTML · CSS · JavaScript · React · Node.js (Express) · PHP</li>
+              <li><b>API</b> REST · Swagger · JWT</li>
+              <li><b data-i18n="sk.other">Muu</b> XML / XSLT · Python (Flask)</li>
+              <li><b data-i18n="sk.tools">Tööriistad</b> Git · GitHub · Visual Studio · JetBrains</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section contact" id="contact" aria-labelledby="h-contact">
+      <h2 class="section__title" id="h-contact"><span class="prompt">$</span> <span data-scramble>ping github.com</span></h2>
+      <pre class="contact__log" aria-hidden="true">PING github.com: 56 data bytes
+64 bytes from github.com: icmp_seq=0 ttl=57 time=13.37 ms
+64 bytes from github.com: icmp_seq=1 ttl=57 time=4.20 ms</pre>
+      <a class="btn btn--big btn--primary" href="https://github.com/IgorAleksejevTTHK" target="_blank" rel="noopener">github.com/IgorAleksejevTTHK ↗</a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <canvas id="noise" class="footer__noise" aria-hidden="true"></canvas>
+    <div class="footer__inner">
+      <p>© 2026 buckl3 // Igor Aleksejev</p>
+      <p class="dim small" data-i18n="footer.fan">Fänni-inspiratsioon hakkeri-esteetikast (Watch Dogs 2). Pole seotud Ubisoftiga. Mask ja kõik ASCII-graafika on originaalsed.</p>
+      <p class="dim small"><a href="https://igoraleksejev24.thkit.ee/wp/" target="_blank" rel="noopener" data-i18n="footer.old">vana portfoolio (WordPress) ↗</a> · <span data-i18n="footer.fonts">Fondid: JetBrains Mono, Chakra Petch (OFL)</span></p>
+    </div>
+  </footer>
+
+  <script src="assets/js/i18n.js" defer></script>
+  <script src="assets/js/ascii.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>
